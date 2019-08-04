@@ -585,10 +585,12 @@ var GroupingComponent = /** @class */ (function () {
         return "max width : " + value + ";";
     };
     GroupingComponent.prototype.sortAttributes = function (value) {
+        var _this = this;
         var header_style_element = document.getElementsByClassName('group-header-desc');
         // console.log(value);
         if (value == 1) {
-            this.availableStudents.sort(function (a, b) { return a.collaboration.localeCompare(b.collaboration); }).reverse();
+            this.availableStudents.sort(function (a, b) { return parseFloat(_this.labelScore(b.collaboration)) - parseFloat(_this.labelScore(a.collaboration)); });
+            // this.availableStudents.sort((a,b) => this.labelScore(a.collaboration).localeCompare(this.labelScore(b.collaboration)));
             this.header_index = 0;
             // console.log(this.header_index);
             for (var i = 0; i < header_style_element.length; i++) {
@@ -596,7 +598,7 @@ var GroupingComponent = /** @class */ (function () {
             }
         }
         if (value == 2) {
-            this.availableStudents.sort(function (a, b) { return a.communication.localeCompare(b.communication); }).reverse();
+            this.availableStudents.sort(function (a, b) { return parseFloat(_this.labelScore(b.communication)) - parseFloat(_this.labelScore(a.communication)); });
             this.header_index = 1;
             // console.log(this.header_index);
             for (var i = 0; i < header_style_element.length; i++) {
@@ -604,14 +606,14 @@ var GroupingComponent = /** @class */ (function () {
             }
         }
         if (value == 3) {
-            this.availableStudents.sort(function (a, b) { return a.problem.localeCompare(b.problem); }).reverse();
+            this.availableStudents.sort(function (a, b) { return parseFloat(_this.labelScore(b.problem)) - parseFloat(_this.labelScore(a.problem)); });
             this.header_index = 2;
             for (var i = 0; i < header_style_element.length; i++) {
                 header_style_element[i].style.color = "#F7AA01";
             }
         }
         if (value == 4) {
-            this.availableStudents.sort(function (a, b) { return a.collaboration.localeCompare(b.project_management); }).reverse();
+            this.availableStudents.sort(function (a, b) { return parseFloat(_this.labelScore(b.project_management)) - parseFloat(_this.labelScore(a.project_management)); });
             this.header_index = 3;
             // console.log(this.header_index);
             for (var i = 0; i < header_style_element.length; i++) {
@@ -619,7 +621,7 @@ var GroupingComponent = /** @class */ (function () {
             }
         }
         if (value == 5) {
-            this.availableStudents.sort(function (a, b) { return a.group_discussion.localeCompare(b.group_discussion); }).reverse();
+            this.availableStudents.sort(function (a, b) { return parseFloat(_this.labelScore(b.group_discussion)) - parseFloat(_this.labelScore(a.group_discussion)); });
             this.header_index = 4;
             for (var i = 0; i < header_style_element.length; i++) {
                 header_style_element[i].style.color = "#FFA2DD";
@@ -675,6 +677,10 @@ var GroupingComponent = /** @class */ (function () {
         var class_roster = [];
         var roster_size = jsonData.length;
         var no_of_groups = Math.floor(roster_size / size_groups);
+        if (this.groupDesignValues.length > no_of_groups) {
+            this.selectedStudents.splice(no_of_groups - 1, this.groupDesignValues.length - no_of_groups);
+            this.groupDesignValues.splice(no_of_groups - 1, this.groupDesignValues.length - no_of_groups);
+        }
         this.numberOfGroups = no_of_groups;
         for (var i = 0; i < no_of_groups; i++) {
             class_roster.push([]);
